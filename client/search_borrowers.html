@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Borrowers</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Search Borrowers</h1>
+    <form action="http://localhost:3000/search-borrowers" method="GET">
+        <label for="searchQuery">Search for Borrowers:</label><br>
+        <input type="text" id="searchQuery" name="searchQuery"><br>
+        <input type="radio" id="user_id" name="searchType" value="user_id" checked>
+        <label for="user_id">By User ID</label><br>
+        <input type="radio" id="username" name="searchType" value="username">
+        <label for="username">By User Name</label><br>
+        <input type="radio" id="email" name="searchType" value="email">
+        <label for="email">By Email</label>
+        <input type="radio" id="phone_number" name="searchType" value="phone_number">
+        <label for="phone_number">By Phone Number</label>
+        <button type="submit">Search</button>
+    </form>
+    <div id="searchResults"></div>
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents the default form submission.
+        const searchQuery = document.getElementById('searchQuery').value;
+
+        // Sends the search request to the server.
+        fetch(`http://localhost:3000/search-borrowers?searchQuery=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json()) // Parses the JSON response.
+        .then(data => {
+            const resultsContainer = document.getElementById('searchResults');
+            let resultsTable = '<table><tr><th>User ID</th><th>User Name</th><th>Email</th><th>Phone Number</th></tr>';
+            
+            // Generates table rows for each borrower.
+            data.forEach(borrower => {
+                resultsTable += `<tr><td>${borrower.user_id}</td><td>${borrower.username}</td><td>${borrower.email}</td><td>${borrower.phone_number}</td></tr>`;
+            });
+            
+            resultsTable += '</table>';
+            resultsContainer.innerHTML = resultsTable; // Inserts the table into the page.
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('searchResults').innerHTML = 'Failed to fetch borrowers.';
+        });
+    });
+    </script>
+</body>
+</html>

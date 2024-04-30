@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Books</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Search Books</h1>
+    <form action="http://localhost:3000/search-books" method="GET">
+        <label for="searchQuery">Search for a book:</label><br>
+        <input type="text" id="searchQuery" name="searchQuery"><br>
+        <input type="radio" id="title" name="searchType" value="title" checked>
+        <label for="title">By Title</label><br>
+        <input type="radio" id="author" name="searchType" value="author">
+        <label for="author">By Author</label><br>
+        <input type="radio" id="year_published" name="searchType" value="year_published">
+        <label for="year_published">By Year Published</label>
+        <input type="radio" id="isbn" name="searchType" value="isbn">
+        <label for="isbn">By ISBN</label>
+        <button type="submit">Search</button>
+    </form>
+    <div id="searchResults"></div>
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents the default form submission.
+        const searchQuery = document.getElementById('searchQuery').value;
+
+        // Sends the search request to the server.
+        fetch(`http://localhost:3000/search-books?searchQuery=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json()) // Parses the JSON response.
+        .then(data => {
+            const resultsContainer = document.getElementById('searchResults');
+            let resultsTable = '<table><tr><th>Title</th><th>Author</th><th>Year Published</th><th>ISBN</th></tr>';
+            
+            // Generates table rows for each book.
+            data.forEach(book => {
+                resultsTable += `<tr><td>${book.title}</td><td>${book.author}</td><td>${book.year_published}</td><td>${book.isbn}</td></tr>`;
+            });
+            
+            resultsTable += '</table>';
+            resultsContainer.innerHTML = resultsTable; // Inserts the table into the page.
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('searchResults').innerHTML = 'Failed to fetch books.';
+        });
+    });
+    </script>
+</body>
+</html>

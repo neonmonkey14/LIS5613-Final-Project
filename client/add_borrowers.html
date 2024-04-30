@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Borrower</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Add New Borrowers</h1>
+    <form action="http://localhost:3000/add-borrowers" method="POST">
+        <label for="user_id">User ID:</label>
+        <input type="number" id="user_id" name="user_id" required><br>
+        <label for="username">User Name:</label>
+        <input type="text" id="username" name="username" required><br>
+        <label for="email">Email:</label>
+        <input type="text" id="email" name="email"><br>
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" id="phone_number" name="phone_number"><br>
+        <button type="submit">Add Borrower</button>
+    </form>
+    <script src="borrowers.js"></script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Transaction</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Add New Transaction</h1>
+    <form action="http://localhost:3000/add-transactions" method="POST">
+        <label for="serial_number">Serial Number:</label>
+        <input type="number" id="serial_number" name="serial_number" required><br>
+        <label for="isbn">ISBN:</label>
+        <input type="number" id="isbn" name="isbn" required><br>
+        <label for="user_id">User ID:</label>
+        <input type="number" id="user_id" name="user_id" required><br>
+        <label for="check_status">Check Status:</label>
+        <input type="text" id="check_status" name="check_status"><br>
+        <label for="date_loaned">Date Loaned:</label>
+        <input type="date" id="date_loaned" name="date_loaned"><br>
+        <label for="date_returned">Date Returned:</label>
+        <input type="date" id="date_returned" name="date_returned"><br>
+        <button type="submit">Add Transaction</button>
+    </form>
+    <script src="transactions.js"></script>
+</body>
+</html>

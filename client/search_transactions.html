@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search Transactions</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Search Transactions</h1>
+    <form action="http://localhost:3000/search-transactions" method="GET">
+        <label for="searchQuery">Search for a Transaction:</label><br>
+        <input type="text" id="searchQuery" name="searchQuery"><br>
+        <input type="radio" id="serial_number" name="searchType" value="serial_number" checked>
+        <label for="serial_number">By Serial Number</label><br>
+        <input type="radio" id="isbn" name="searchType" value="isbn">
+        <label for="isbn">By ISBN</label><br>
+        <input type="radio" id="user_id" name="searchType" value="user_id">
+        <label for="user_id">By User ID</label>
+        <input type="radio" id="check_status" name="searchType" value="check_status">
+        <label for="check_status">By Check Status</label>
+        <input type="radio" id="date_loaned" name="searchType" value="date_loaned">
+        <label for="date_loaned">By Date Loaned</label>
+        <input type="radio" id="date_returned" name="searchType" value="date_returned">
+        <label for="date_returned">By Date Returned</label>
+        <button type="submit">Search</button>
+    </form>
+    <div id="searchResults"></div>
+    <script>
+    document.querySelector('form').addEventListener('submit', function(e) {
+        e.preventDefault(); // Prevents the default form submission.
+        const searchQuery = document.getElementById('searchQuery').value;
+
+        // Sends the search request to the server.
+        fetch(`http://localhost:3000/search-transactions?searchQuery=${encodeURIComponent(searchQuery)}`)
+        .then(response => response.json()) // Parses the JSON response.
+        .then(data => {
+            const resultsContainer = document.getElementById('searchResults');
+            let resultsTable = '<table><tr><th>Serial Number</th><th>ISBN</th><th>User ID</th><th>Check Status</th><th>Date Loaned</th><th>Date Returned</th></tr>';
+            
+            // Generates table rows for each transaction.
+            data.forEach(transaction => {
+                resultsTable += `<tr><td>${transaction.serial_number}</td><td>${transaction.isbn}</td><td>${transaction.user_id}</td><td>${transaction.check_status}</td><td>${transaction.date_loaned}</td><td>${transaction.date_returned}</td></tr>`;
+            });
+            
+            resultsTable += '</table>';
+            resultsContainer.innerHTML = resultsTable; // Inserts the table into the page.
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('searchResults').innerHTML = 'Failed to fetch transactions.';
+        });
+    });
+    </script>
+</body>
+</html>
